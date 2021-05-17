@@ -37,10 +37,46 @@ const Wrap = styled.div`
         padding: 2rem;
         font-size: 2rem;
     }
+
+    span {
+        margin-right: 1.5rem;
+    }
     
 `;
 
+const Dropdown = styled.div`
+
+    background: #1c1c1c;
+    color: #00ffb9;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #00ffb9;
+    border-top: 1px solid #00ffb9;
+
+    p {
+        font-size: 2rem;
+    }
+
+`;
+
 function Accordion() {
+    const [clicked, setClicked] = useState(false);
+
+    /* If clicked question is already active, then close it */
+
+    const toggle = index => {
+        if(clicked === index){
+            return setClicked(null)
+        } 
+
+        setClicked(index);
+    }
+
+
     return (
         <IconContext.Provider
             value = {{ color: '#00FFB9', size: '25px'}}
@@ -50,10 +86,18 @@ function Accordion() {
                     {Data.map((item, index) => {
                         return (
                             <>
-                                <Wrap>
+                                <Wrap 
+                                    onClick = {() => toggle(index)}
+                                    key = {index}
+                                >
                                     <h1>{item.question}</h1>
+                                    <span>{clicked === index ? <FiMinus /> : <FiPlus />}</span>
                                 </Wrap>
-                                    <p>{item.answer}</p>
+                                {clicked === index ? (
+                                    <Dropdown>
+                                        <p>{item.answer}</p>
+                                    </Dropdown>
+                                ) : null}
                             </>
                         )
                     })}
